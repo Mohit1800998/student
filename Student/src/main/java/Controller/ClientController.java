@@ -1,0 +1,60 @@
+package Controller;
+
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import Model.Client;
+import Service.Student_Service;
+
+@Validated
+@RestController
+@CrossOrigin(origins="http://localhost:4200")
+@RequestMapping(value="/client")
+public class ClientController {
+	
+	@Autowired
+	private Student_Service studentservice;
+	
+	@PostMapping("save-student")
+	public boolean saveStudent(@RequestBody @Valid Client student) {
+		 return studentservice.saveStudent(student);
+		
+	}
+	
+	@GetMapping("students-list")
+	public List<Client> allstudents() {
+		 return studentservice.getStudents();
+	}
+	
+	
+	@DeleteMapping("delete-student/{student_id}")
+	public boolean deleteStudent(@PathVariable("student_id") int student_id,Client student) {
+		student.setStudent_id(student_id);
+		return studentservice.deleteStudent(student);
+	}
+
+	@GetMapping("student/{student_id}")
+	public List<Client> allstudentByID(@PathVariable("student_id") int student_id,Client student) {
+		 student.setStudent_id(student_id);
+		 return studentservice.getStudentByID(student);
+		
+	}
+	
+	@PostMapping("update-student/{student_id}")
+	public boolean updateStudent(@RequestBody Client student,@PathVariable("student_id") int student_id) {
+		student.setStudent_id(student_id);
+		return studentservice.updateStudent(student);
+	}
+}
